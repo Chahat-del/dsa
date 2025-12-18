@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 5
+
+char Q[MAX];
+int front = -1, rear = -1;
+
+void enqueue(char ch) {
+    // TODO: check full, print error; else advance rear, set Q[rear], init front if needed
+    if ((front == 0 && rear == MAX - 1) || (rear + 1) % MAX == front) {
+        printf("Queue is full. Enqueue not possible\n");
+    } else if (front == -1 && rear == -1) {
+        front = rear = 0;
+        Q[rear] = ch;
+    } else {
+        rear = (rear + 1) % MAX;
+        Q[rear] = ch;
+    }
+}
+
+void dequeue() {
+    // TODO: check empty, print error; else print Q[front], advance front or reset both to -1
+    if (front == -1) {
+        printf("Queue is empty. Dequeue not possible\n");
+    } else if (front == rear) {
+        printf("The item dequeued is %c\n", Q[front]);
+        front = rear = -1;
+    } else {
+        printf("The item dequeued is %c\n", Q[front]);
+        front = (front + 1) % MAX;
+    }
+}
+
+void display() {
+    // TODO: if empty print error; else loop from front to rear (wrap) and print each slot
+    if (front == -1) {
+        printf("Queue is empty. Nothing to display\n");
+        return;
+    }
+    printf("The elements in the queue are\n");
+    int i = front;
+    while (1) {
+        printf("Queue[%d] ======> %c\n", i, Q[i]);
+        if (i == rear) {
+            break;
+        }
+        i = (i + 1) % MAX;
+    }
+}
+
+int main() {
+    int cmd;
+    while (scanf("%d", &cmd) == 1) {
+        if (cmd == 1) {
+            char ch; scanf(" %c", &ch);
+            enqueue(ch);
+        }
+        else if (cmd == 2) {
+            dequeue();
+        }
+        else if (cmd == 3) {
+            display();
+        }
+        else {
+            break;
+        }
+    }
+    return 0;
+}
