@@ -1,0 +1,94 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+#define MAX 100
+
+// Global stack and top pointer
+int stack[MAX];
+int top = -1;
+
+
+// Push an element to the stack
+void push(int x) {
+    if(top==MAX-1)
+        printf("Stack Overflow\n");
+    else
+        stack[++top] = x;
+}
+
+// Pop the top element from the stack
+void pop() {
+    if(top ==-1)
+         printf("Stack Underflow\n");
+    else{
+        top--;
+        printf("\n");
+    }
+    
+    
+}
+
+// Check if the given string is a palindrome using a stack
+void checkPalindrome(char *s) {
+    int len = strlen(s);
+    bool val=true;
+    for(int i =0;i<len;i++){
+        if(s[i]!=s[len-i-1]){
+            val = false;
+        break;
+        }
+    }
+    if(val==false)
+        printf("Not a palindrome\n");
+    else
+        printf("It is a palindrome\n");
+}
+
+// Display all elements in the stack from bottom to top
+void display() {
+    if(top==-1)
+        printf("Stack is empty\n");
+    else{
+        for(int i=0;i<=top;i++)
+    {
+        printf("%d ",stack[i]);
+    }
+    }
+}
+
+// Trim newline from string input 
+void trimNewline(char *str) {
+    size_t len = strlen(str);
+    if (len > 0 && str[len-1] == '\n') {
+        str[len-1] = '\0';
+    }
+}
+
+int main() {
+    int T;
+    scanf("%d", &T);
+    getchar(); // Consume newline after the integer input
+
+    char command[120];
+    for (int i = 0; i < T; i++) {
+        fgets(command, sizeof(command), stdin);
+        trimNewline(command);
+
+        if (strncmp(command, "PUSH ", 5) == 0) {
+            int x;
+            sscanf(command + 5, "%d", &x);
+            push(x);
+        } else if (strcmp(command, "POP") == 0) {
+            pop();
+        } else if (strncmp(command, "PALINDROME ", 11) == 0) {
+            char str[105];
+            strcpy(str, command + 11);
+            checkPalindrome(str);
+        } else if (strcmp(command, "DISPLAY") == 0) {
+            display();
+        }
+    }
+
+    return 0;
+}
