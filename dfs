@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 20
+
+int adj[MAX][MAX];     // Adjacency matrix
+int visited[MAX];      // Visited flags
+int N;                 // Number of cities
+
+// Depth First Search - implemented
+void dfs(int src) {
+    visited[src] = 1;
+    printf("%d\n", src);
+
+    for (int i = 0; i < N; i++) {
+        if (adj[src][i] == 1 && !visited[i]) {
+            dfs(i);
+        }
+    }
+}
+
+// Breadth First Search - implemented
+void bfs(int src) {
+    int queue[MAX];
+    int front = 0, rear = 0;
+
+    visited[src] = 1;
+    queue[rear++] = src;
+
+    while (front < rear) {
+        int u = queue[front++];
+        printf("%d\n", u);
+
+        for (int i = 0; i < N; i++) {
+            if (adj[u][i] == 1 && !visited[i]) {
+                visited[i] = 1;
+                queue[rear++] = i;
+            }
+        }
+    }
+}
+
+int main() {
+    // Read number of cities
+    scanf("%d", &N);
+
+    // Read adjacency matrix
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            scanf("%d", &adj[i][j]);
+        }
+    }
+
+    // Read traversal method
+    char method[5];
+    scanf("%s", method);
+
+    // Read source city
+    int src;
+    scanf("%d", &src);
+
+    // Initialize visited array
+    for (int i = 0; i < N; i++) {
+        visited[i] = 0;
+    }
+
+    // Choose traversal method
+    if (strcmp(method, "DFS") == 0) {
+        dfs(src);
+    } else if (strcmp(method, "BFS") == 0) {
+        bfs(src);
+    }
+
+    return 0;
+}
