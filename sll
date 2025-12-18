@@ -1,0 +1,166 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_LEN 21
+
+typedef struct Student {
+    char usn[MAX_LEN];
+    char name[MAX_LEN];
+    char programme[MAX_LEN];
+    int sem;
+    char phNo[MAX_LEN];
+    struct Student* next;
+} Student;
+
+Student* head = NULL;
+
+/* create a new node */
+Student* createNode(char* usn, char* name, char* programme, int sem, char* phNo) {
+    Student* node;
+    node = (Student*) malloc(sizeof(Student));
+    strcpy(node->usn, usn);
+    strcpy(node->name, name);
+    strcpy(node->programme, programme);
+    node->sem = sem;
+    strcpy(node->phNo, phNo);
+    node->next = NULL;
+    return node;
+}
+
+/* clear entire list */
+void clearList() {
+    Student* temp;
+    Student* next;
+    temp = head;
+    while (temp != NULL) {
+        next = temp->next;
+        free(temp);
+        temp = next;
+    }
+    head = NULL;
+}
+
+/* insert at front */
+void insertFront(char* usn, char* name, char* programme, int sem, char* phNo) {
+    Student* node;
+    node = createNode(usn, name, programme, sem, phNo);
+    node->next = head;
+    head = node;
+}
+
+/* insert at end */
+void insertEnd(char* usn, char* name, char* programme, int sem, char* phNo) {
+    Student* node;
+    Student* temp;
+    node = createNode(usn, name, programme, sem, phNo);
+    if (head == NULL) {
+        head = node;
+        return;
+    }
+    temp = head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = node;
+}
+
+/* delete from front */
+void deleteFront() {
+    Student* temp;
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    temp = head;
+    head = head->next;
+    free(temp);
+}
+
+/* delete from end */
+void deleteEnd() {
+    Student* temp;
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    if (head->next == NULL) {
+        free(head);
+        head = NULL;
+        return;
+    }
+    temp = head;
+    while (temp->next->next != NULL) {
+        temp = temp->next;
+    }
+    free(temp->next);
+    temp->next = NULL;
+}
+
+/* display list */
+void display() {
+    Student* temp;
+    int count;
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    temp = head;
+    count = 0;
+    while (temp != NULL) {
+        printf("%s %s %s %d %s\n", temp->usn, temp->name, temp->programme, temp->sem, temp->phNo);
+        temp = temp->next;
+        count++;
+    }
+    printf("Total Nodes = %d\n", count);
+}
+
+int main() {
+    int T;
+    int i;
+    if (scanf("%d", &T) != 1) {
+        return 0;
+    }
+
+    for (i = 0; i < T; i++) {
+        char cmd[20];
+        if (scanf("%s", cmd) != 1) break;
+
+        if (strcmp(cmd, "CREATE") == 0) {
+            int N;
+            int j;
+            char usn[MAX_LEN], name[MAX_LEN], programme[MAX_LEN], phNo[MAX_LEN];
+            int sem;
+            if (scanf("%d", &N) != 1) N = 0;
+            clearList();
+            for (j = 0; j < N; j++) {
+                scanf("%s %s %s %d %s", usn, name, programme, &sem, phNo);
+                insertFront(usn, name, programme, sem, phNo);
+            }
+        }
+        else if (strcmp(cmd, "INSERT_FRONT") == 0) {
+            char usn[MAX_LEN], name[MAX_LEN], programme[MAX_LEN], phNo[MAX_LEN];
+            int sem;
+            scanf("%s %s %s %d %s", usn, name, programme, &sem, phNo);
+            insertFront(usn, name, programme, sem, phNo);
+        }
+        else if (strcmp(cmd, "INSERT_END") == 0) {
+            char usn[MAX_LEN], name[MAX_LEN], programme[MAX_LEN], phNo[MAX_LEN];
+            int sem;
+            scanf("%s %s %s %d %s", usn, name, programme, &sem, phNo);
+            insertEnd(usn, name, programme, sem, phNo);
+        }
+        else if (strcmp(cmd, "DELETE_FRONT") == 0) {
+            deleteFront();
+        }
+        else if (strcmp(cmd, "DELETE_END") == 0) {
+            deleteEnd();
+        }
+        else if (strcmp(cmd, "DISPLAY") == 0) {
+            display();
+        }
+    }
+
+    clearList();
+    return 0;
+}
